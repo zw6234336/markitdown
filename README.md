@@ -176,6 +176,52 @@ result = md.convert("example.jpg")
 print(result.text_content)
 ```
 
+### HTTP API Server
+
+MarkItDown also provides an HTTP API server for integration with web applications:
+
+```bash
+# Install API server
+pip install markitdown-api
+
+# Start the server
+markitdown-api --host 0.0.0.0 --port 8000
+
+# Or run with Docker
+docker run -p 8000:8000 markitdown-api
+```
+
+#### API Endpoints
+
+- **POST /api/v1/convert** - Convert uploaded file to Markdown
+- **POST /api/v1/convert/url** - Convert file from URL to Markdown  
+- **GET /api/v1/health** - Health check
+- **GET /api/v1/formats** - List supported formats
+
+#### Usage Examples
+
+```bash
+# Convert local file
+curl -X POST -F "file=@document.pdf" http://localhost:8000/api/v1/convert
+
+# Convert from URL
+curl -X POST -H "Content-Type: application/json" \
+     -d '{"url": "https://example.com/document.pdf"}' \
+     http://localhost:8000/api/v1/convert/url
+```
+
+#### Python Client
+
+```python
+from markitdown_api import MarkItDownClient
+
+client = MarkItDownClient("http://localhost:8000")
+result = client.convert_file("document.pdf")
+print(result['markdown'])
+```
+
+For more information, see [markitdown-api](packages/markitdown-api/README.md).
+
 ### Docker
 
 ```sh
